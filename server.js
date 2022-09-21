@@ -6,7 +6,7 @@ var logger = require("morgan");
 
 
 
-
+app.use(express.json());
 // Copy the .env.example in the root into a .env file in this folder
 require('dotenv').config({ path: './.env' });
 app.use(logger("dev"));
@@ -68,7 +68,7 @@ app.post('/create-checkout-session', async (req, res) => {
     cancel_url: `${domainURL}/canceled.html`,
     // automatic_tax: { enabled: true }
   });
-
+console.log("=======================");
   return res.redirect(303, session.url);
 });
 
@@ -76,8 +76,9 @@ app.post('/create-checkout-session', async (req, res) => {
 
 
 
-app.post('/webhook', async (req, res) => {
+app.post('/Webhook', async (req, res) => {
  // let event;
+ console.log("=======================2222222");
  console.log( "======payment_method.attached========1");
   const event = req.body;
   switch (event.type) {
