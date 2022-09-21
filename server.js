@@ -74,6 +74,14 @@ console.log("=======================");
 
 // Webhook handler for asynchronous events.
 
+app.get('/readtext', async (req, res) => {
+  try {
+    const data = fs.readFileSync('helloworld.txt', 'utf8');
+    res.send(data);
+  } catch (err) {
+    console.error(err);
+  }
+})
 
 
 app.post('/webhook', async (req, res) => {
@@ -144,6 +152,11 @@ fs.writeFile('helloworld.txt', JSON.stringify(invoice), function (err) {
 
 
 });
+
+
+
+
+
 
 
     app.listen(process.env.PORT, () =>
