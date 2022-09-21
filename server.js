@@ -24,17 +24,17 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
 
 app.use(express.static(process.env.STATIC_DIR));
 app.use(express.urlencoded());
-app.use(
-  express.json({
-    // We need the raw body to verify webhook signatures.
-    // Let's compute it only when hitting the Stripe webhook endpoint.
-    verify: function (req, res, buf) {
-      if (req.originalUrl.startsWith('/webhook')) {
-        req.rawBody = buf.toString();
-      }
-    },
-  })
-);
+// app.use(
+//   express.json({
+//     // We need the raw body to verify webhook signatures.
+//     // Let's compute it only when hitting the Stripe webhook endpoint.
+//     verify: function (req, res, buf) {
+//       if (req.originalUrl.startsWith('/webhook')) {
+//         req.rawBody = buf.toString();
+//       }
+//     },
+//   })
+// );
 
 app.get('/', (req, res) => {
   const path = resolve(process.env.STATIC_DIR + '/index.html');
@@ -76,11 +76,12 @@ console.log("=======================");
 
 
 
-app.post('/Webhook', async (req, res) => {
+app.post('/webhook', async (req, res) => {
  // let event;
  console.log("=======================2222222");
  console.log( "======payment_method.attached========1");
   const event = req.body;
+  console.log(event.type);
   switch (event.type) {
     case 'invoice.payment_failed':
       const invoice = event.data.object;
@@ -105,11 +106,11 @@ fs.writeFile('helloworld.txt', JSON.stringify(invoice), function (err) {
       break;
 
     case "payment_intent.succeeded":
+      
       const paymentIntent = event.data.object;
-      fs.writeFile('helloworld.txt', JSON.stringify(paymentIntent), function (err) {
-        if (err) return console.log(err);
-        console.log('Hello World > helloworld.txt');
-      });
+      fs.writeFile('helloworld.txt', JSON.stringify(paymentIntent),
+        console.log('Hello World > helloworld.txt')
+     )
 
       break;
     case "payment_intent.payment_failed":
@@ -140,7 +141,7 @@ fs.writeFile('helloworld.txt', JSON.stringify(invoice), function (err) {
     default:
   }
 
-  response.json({ received: true });
+
 
 });
 
