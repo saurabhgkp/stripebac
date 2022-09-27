@@ -48,6 +48,15 @@ app.get('/checkout-session', async (req, res) => {
   res.send(session);
 });
 
+
+
+app.get('/subsDetails', async (req, res) => {
+  const subId = "sub_1LkOg6HZetQAqLbMSGIHJSao"
+  const subscriptionDetails = await stripe.subscriptions.retrieve(subId)
+  console.log(subscriptionDetails);
+});
+
+
 app.post('/create-checkout-session', async (req, res) => {
   const domainURL = process.env.DOMAIN;
 
